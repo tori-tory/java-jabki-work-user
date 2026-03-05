@@ -24,6 +24,14 @@ public class ExceptionController {
                 .body(new ApiError(false, e.getMessage()));
     }
 
+    @ExceptionHandler(UserException.class)
+    public ResponseEntity<ApiError> handleBadRequest(UserException e) {
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ApiError(false, e.getMessage()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleUnexpected(Exception e) {
 

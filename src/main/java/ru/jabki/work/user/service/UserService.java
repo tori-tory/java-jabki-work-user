@@ -66,7 +66,7 @@ public class UserService {
 
         return users.stream()
                 .map(user -> new UserResponse(user.getId(), user.getUsername()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private void validate(final UserRequest userRequest) {

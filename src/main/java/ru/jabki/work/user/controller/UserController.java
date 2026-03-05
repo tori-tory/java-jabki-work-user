@@ -44,7 +44,7 @@ public class UserController {
         return userService.existsById(id);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @Operation(summary = "Удалить пользователя по id")
     public ApiSuccess delete(@PathVariable("id") Long id) {
         return userService.softDelete(id);
