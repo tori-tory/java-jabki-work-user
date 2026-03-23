@@ -44,6 +44,12 @@ public class UserController {
         return userService.existsById(id);
     }
 
+    @GetMapping("/exists/manager/{id}")
+    @Operation(summary = "Наличие у пользователя роли MANAGER")
+    public boolean isManager(@PathVariable("id") Long id) {
+        return userService.isManager(id);
+    }
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Удалить пользователя по id")
     public ApiSuccess delete(@PathVariable("id") Long id) {
