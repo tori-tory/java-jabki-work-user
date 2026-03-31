@@ -16,8 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 public class UserRepository {
     private static final String INSERT = """
-        INSERT INTO work_user."user"(username, password)
-        VALUES (:username, :password)
+        INSERT INTO work_user."user"(username, password, user_role)
+        VALUES (:username, :password, :user_role)
         RETURNING id
         """;
 
@@ -29,7 +29,7 @@ public class UserRepository {
             """;
 
     private static final String GET_BY_ID = """
-            SELECT id, username
+            SELECT id, username, user_role
             FROM work_user."user"
             WHERE id = :id
             AND deleted_at is null
@@ -44,8 +44,18 @@ public class UserRepository {
             )
             """;
 
+    private static final String IS_MANAGER =  """
+            SELECT EXISTS (
+                SELECT 1
+                FROM work_user."user"
+                WHERE id = :id
+                AND deleted_at is null
+                AND user_role = 'MANAGER'
+            )
+            """;
+
     private static final String GET_ALL = """
-            SELECT id, username
+            SELECT id, username, user_role
             FROM work_user."user"
             WHERE deleted_at is null
             """;
@@ -74,6 +84,11 @@ public class UserRepository {
                 jdbcTemplate.queryForObject(EXISTS_BY_ID, new MapSqlParameterSource("id", id), Boolean.class));
     }
 
+    public boolean isManager(final Long id) {
+        return Boolean.TRUE.equals(
+                jdbcTemplate.queryForObject(IS_MANAGER, new MapSqlParameterSource("id", id), Boolean.class));
+    }
+
     public int softDelete(final Long id) {
         return jdbcTemplate.update(SOFT_DELETE, new MapSqlParameterSource("id", id));
     }
@@ -87,6 +102,7 @@ public class UserRepository {
 
         params.addValue("username", user.getUsername());
         params.addValue("password", user.getPassword());
+        params.addValue("user_role",user.getRole().name());
         return params;
     }
 }

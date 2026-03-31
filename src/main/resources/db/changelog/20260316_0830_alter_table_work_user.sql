@@ -1,0 +1,2 @@
+ALTER TABLE work_user."user"
+    ADD COLUMN user_role VARCHAR NOT NULL DEFAULT 'USER';
